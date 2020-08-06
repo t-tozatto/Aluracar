@@ -1,11 +1,11 @@
-import { NavLifeCycles } from './../../utils/ionic/nav/nav-lifecycles';
+import { EscolhaPage } from './../escolha/escolha';
+import { NavLifeCycles } from "./../../utils/ionic/nav/nav-lifecycles";
 import { HttpErrorResponse } from "@angular/common/http";
-import { Component, OnInit } from "@angular/core";
+import { Component } from "@angular/core";
 import {
   NavController,
   LoadingController,
   AlertController,
-  Button,
 } from "ionic-angular";
 
 import { Carro } from "../../modelos/carro";
@@ -32,21 +32,29 @@ export class HomePage implements NavLifeCycles {
 
     loading.present();
 
-    this._carrosService.lista()
-      .subscribe(
-        (carros) => {
-          this.carros = carros;
-          loading.dismiss();
-        }, 
-        (err: HttpErrorResponse) => {
-          loading.dismiss();
-          this._alertController.create({
-              title: 'Falha na conexão',
-              subTitle: 'Não foi possível carregar a lista de carros. Tente novamente mais tarde.',
-              buttons:[
-                { text: 'Ok'}
-              ]
-          }).present();
-        });
+    this._carrosService.lista().subscribe(
+      (carros) => {
+        this.carros = carros;
+        loading.dismiss();
+      },
+      (err: HttpErrorResponse) => {
+        loading.dismiss();
+        this._alertController
+          .create({
+            title: "Falha na conexão",
+            subTitle:
+              "Não foi possível carregar a lista de carros. Tente novamente mais tarde.",
+            buttons: [{ text: "Ok" }],
+          })
+          .present();
+      }
+    );
+  }
+
+  selecionaCarro(carro: Carro) {
+    console.log(carro);
+    this.navCtrl.push(EscolhaPage.name, {
+      carroSelecionado: carro
+    });
   }
 }
