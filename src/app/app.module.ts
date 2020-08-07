@@ -1,4 +1,3 @@
-import { EscolhaPage } from './../pages/escolha/escolha';
 import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
@@ -9,6 +8,9 @@ import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { HttpClientModule } from '@angular/common/http';
 import { CarrosServiceProvider } from '../providers/carros-service/carros-service';
+import { AgendamentosServiceProvider } from '../providers/agendamentos-service/agendamentos-service';
+
+import 'rxjs/add/operator/finally';
 
 @NgModule({
   declarations: [
@@ -29,7 +31,8 @@ import { CarrosServiceProvider } from '../providers/carros-service/carros-servic
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    CarrosServiceProvider
+    CarrosServiceProvider,
+    AgendamentosServiceProvider
   ]
 })
 export class AppModule {}
