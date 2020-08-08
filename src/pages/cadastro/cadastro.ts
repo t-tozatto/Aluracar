@@ -1,3 +1,4 @@
+import { AgendamentoDaoProvider } from './../../providers/agendamento-dao/agendamento-dao';
 import { HomePage } from "./../home/home";
 import { AgendamentosServiceProvider } from "./../../providers/agendamentos-service/agendamentos-service";
 import { Carro } from "./../../modelos/carro";
@@ -30,7 +31,8 @@ export class CadastroPage {
     private navCtrl: NavController,
     private navParams: NavParams,
     private _agendamentoService: AgendamentosServiceProvider,
-    private _alertController: AlertController
+    private _alertController: AlertController,
+    private _agendamentoDao: AgendamentoDaoProvider
   ) {
     this.carro = this.navParams.get("carroSelecionado");
     this.precoTotal = this.navParams.get("precoTotal");
@@ -53,6 +55,9 @@ export class CadastroPage {
       emailCliente: this.email,
       modeloCarro: this.carro.nome,
       precoTotal: this.precoTotal,
+      confirmado: false,
+      enviado: false,
+      data: this.data
     };
 
     this._alerta = this._alertController.create({
@@ -70,17 +75,21 @@ export class CadastroPage {
     let mensagem = "";
     this._agendamentoService
       .agenda(agendamento)
+      .mergeMap((valor) => {
+
+        let observable = this._agendamentoDao.salva(agendamento);
+        if(valor instanceof Error){
+          throw valor;
+        }
+        return observable;
+      })
       .finally(() => {
         this._alerta.setSubTitle(mensagem);
         this._alerta.present();
       })
       .subscribe(
-        () => {
-          mensagem = "Agendamento realizado!";
-        },
-        () => {
-          mensagem = "Falha no agendamento! Tente novamente mais tarde.";
-        }
+        () => mensagem = 'Agendamento realizado!',
+        (err: Error) => mensagem = err.message
       );
   }
 }
