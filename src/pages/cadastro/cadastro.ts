@@ -1,29 +1,30 @@
 import { AgendamentoDaoProvider } from './../../providers/agendamento-dao/agendamento-dao';
-import { HomePage } from "./../home/home";
-import { AgendamentosServiceProvider } from "./../../providers/agendamentos-service/agendamentos-service";
-import { Carro } from "./../../modelos/carro";
-import { Component } from "@angular/core";
+import { HomePage } from './../home/home';
+import { AgendamentosServiceProvider } from './../../providers/agendamentos-service/agendamentos-service';
+import { Carro } from './../../modelos/carro';
+import { Component } from '@angular/core';
 import {
   IonicPage,
   NavController,
   NavParams,
   AlertController,
   Alert,
-} from "ionic-angular";
-import { Agendamento } from "../../modelos/agendamento";
+} from 'ionic-angular';
+import { Agendamento } from '../../modelos/agendamento';
+import { Vibration } from '@ionic-native/vibration';
 
 @IonicPage()
 @Component({
-  selector: "page-cadastro",
-  templateUrl: "cadastro.html",
+  selector: 'page-cadastro',
+  templateUrl: 'cadastro.html',
 })
 export class CadastroPage {
   public carro: Carro;
   public precoTotal: number;
 
-  public nome: string = "";
-  public endereco: string = "";
-  public email: string = "";
+  public nome: string = '';
+  public endereco: string = '';
+  public email: string = '';
   public data: string = new Date().toISOString();
   private _alerta: Alert;
 
@@ -34,17 +35,18 @@ export class CadastroPage {
     private _alertController: AlertController,
     private _agendamentoDao: AgendamentoDaoProvider
   ) {
-    this.carro = this.navParams.get("carroSelecionado");
-    this.precoTotal = this.navParams.get("precoTotal");
+    this.carro = this.navParams.get('carroSelecionado');
+    this.precoTotal = this.navParams.get('precoTotal');
   }
 
   agenda() {
     if (!this.nome || !this.endereco || !this.email) {
+      Vibration.vibrate(500)
       this._alertController
         .create({
-          title: "Preenchimento obrigatório",
-          subTitle: "Preencha todos os campos!",
-          buttons: [{ text: "Ok" }],
+          title: 'Preenchimento obrigatório',
+          subTitle: 'Preencha todos os campos!',
+          buttons: [{ text: 'Ok' }],
         })
         .present();
       return;
@@ -61,10 +63,10 @@ export class CadastroPage {
     };
 
     this._alerta = this._alertController.create({
-      title: "Aviso",
+      title: 'Aviso',
       buttons: [
         {
-          text: "Ok",
+          text: 'Ok',
           handler: () => {
             this.navCtrl.setRoot(HomePage);
           },

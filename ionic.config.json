@@ -1,6 +1,9 @@
 {
   "name": "aluracar",
-  "integrations": {},
+  "integrations": {
+    "capacitor": {},
+    "cordova": {}
+  },
   "type": "ionic-angular",
   "id": "96d57681"
 }

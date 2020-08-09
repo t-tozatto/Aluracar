@@ -1,3 +1,4 @@
+import { ApiServiceProvider } from './../api-service/api-service';
 import { Observable } from 'rxjs/Observable';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
@@ -6,10 +7,11 @@ import { Agendamento } from '../../modelos/agendamento';
 @Injectable()
 export class AgendamentosServiceProvider {
 
-  private _url = 'http://localhost:8080/api/'
+  private _url: string;
 
-  constructor(public _http: HttpClient) {
-    
+  constructor(public _http: HttpClient,
+              _apiService: ApiServiceProvider) {
+    this._url = _apiService.apiUrl;
   }
 
   agenda(agendamento: Agendamento) {

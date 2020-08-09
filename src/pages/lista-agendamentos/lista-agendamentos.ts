@@ -9,7 +9,6 @@ import {
   Alert,
 } from "ionic-angular";
 import { AgendamentosServiceProvider } from "../../providers/agendamentos-service/agendamentos-service";
-import { HomePage } from "../home/home";
 
 @IonicPage()
 @Component({
