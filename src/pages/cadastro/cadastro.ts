@@ -72,24 +72,34 @@ export class CadastroPage {
       ],
     });
 
-    let mensagem = "";
-    this._agendamentoService
-      .agenda(agendamento)
-      .mergeMap((valor) => {
+    let mensagem = '';
 
-        let observable = this._agendamentoDao.salva(agendamento);
-        if(valor instanceof Error){
-          throw valor;
-        }
-        return observable;
-      })
-      .finally(() => {
-        this._alerta.setSubTitle(mensagem);
-        this._alerta.present();
-      })
-      .subscribe(
-        () => mensagem = 'Agendamento realizado!',
-        (err: Error) => mensagem = err.message
-      );
+    this._agendamentoDao.chaveDuplicada(agendamento)
+        .mergeMap(duplicado => {
+          if (duplicado) {
+            throw new Error('Agendamento existente!');
+          }
+
+          return this._agendamentoService.agenda(agendamento);
+        })
+        .mergeMap((valor) => {
+
+          let observable = this._agendamentoDao.salva(agendamento);
+          if (valor instanceof Error) {
+            throw valor;
+          }
+          
+          return observable;
+        })
+        .finally(
+          () => {
+            this._alerta.setSubTitle(mensagem);
+            this._alerta.present();
+          }
+        )
+        .subscribe(
+          () => mensagem = 'Agendamento realizado!',
+          (err: Error) => mensagem = err.message
+        );
   }
 }
